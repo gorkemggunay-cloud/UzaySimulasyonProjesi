@@ -43,7 +43,7 @@ int main() {
         printf("\nLutfen yapmak istediginiz deneyi secin (-1 Cikis): ");
         if (scanf("%d", &choice) != 1) {
             while(getchar() != '\n'); 
-            choice = 0; // Gecersiz secim
+            choice = 0; 
         }
 
         if (choice == -1) {
@@ -105,7 +105,7 @@ double get_positive_input(char *message) {
 void wait_for_user() {
     printf("\nDevam etmek icin Enter'a basin");
     while(getchar() != '\n');
-    getchar(); // Bekle
+    getchar();
 }
 // 1.deney serbest dusme: h = 0.5 * g * t^2
 void exp_free_fall(double *g_ptr, char **names_ptr) {
