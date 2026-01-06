@@ -6,12 +6,10 @@
 #define PLANET_COUNT 8
 #define PI 3.14159265359
 
-// Fonksiyon Prototipleri
 void show_menu();
 double get_positive_input(char *message);
 void wait_for_user();
 
-// Deney Fonksiyonlari
 void exp_free_fall(double *g_ptr, char **names_ptr);
 void exp_vertical_throw(double *g_ptr, char **names_ptr);
 void exp_weight(double *g_ptr, char **names_ptr);
@@ -23,26 +21,18 @@ void exp_rope_tension(double *g_ptr, char **names_ptr);
 void exp_elevator(double *g_ptr, char **names_ptr);
 
 int main() {
-    // Gezegen yercekimi ivmeleri (Merkur, Venus, Dunya, Mars, Jupiter, Saturn, Uranus, Neptun)
     double gravities[PLANET_COUNT] = {3.70, 8.87, 9.81, 3.71, 24.79, 10.44, 8.69, 11.15};
-    
-    // Gezegen isimleri
     char *planet_names[PLANET_COUNT] = {
         "Merkur", "Venus", "Dunya", "Mars", 
         "Jupiter", "Saturn", "Uranus", "Neptun"
     };
-
     char scientist_name[50];
     int choice;
-
-    // 1. Program Açılışı
     printf("************************************************\n");
     printf("* UZAY SIMULASYONUNA HOS GELDINIZ        *\n");
     printf("************************************************\n");
     printf("Lutfen Bilim Insani Adini Giriniz: ");
-    // Bosluklu isim alabilmek icin fgets kullaniyoruz
     fgets(scientist_name, 50, stdin);
-    // Sondaki enter karakterini silme islemi
     scientist_name[strcspn(scientist_name, "\n")] = 0;
 
     printf("\nHos geldin, Bilim Insani %s.\n", scientist_name);
@@ -52,7 +42,6 @@ int main() {
         show_menu();
         printf("\nLutfen yapmak istediginiz deneyi secin (-1 Cikis): ");
         if (scanf("%d", &choice) != 1) {
-            // Harf girilirse sonsuz donguye girmemesi icin buffer temizleme
             while(getchar() != '\n'); 
             choice = 0; // Gecersiz secim
         }
@@ -86,8 +75,6 @@ int main() {
 
     return 0;
 }
-
-// Menuyu ekrana basan fonksiyon
 void show_menu() {
     printf("\n================ DENEY LISTESI ================\n");
     printf("1. Serbest Dusme Deneyi\n");
@@ -102,13 +89,11 @@ void show_menu() {
     printf("============================================\n");
 }
 
-// Kullanicidan pozitif deger alma ve ternary operator zorunlulugu fonksiyonu
 double get_positive_input(char *message) {
     double val;
     printf("%s", message);
     scanf("%lf", &val);
     
-    // ZORUNLULUK: if kullanmadan ternary ile mutlak deger alma
     double final_val = (val < 0) ? -val : val;
     
     if (val < 0) {
@@ -117,16 +102,12 @@ double get_positive_input(char *message) {
     return final_val;
 }
 
-// Cikti okumak icin bekletme
 void wait_for_user() {
-    printf("\nDevam etmek icin Enter'a basin...");
-    while(getchar() != '\n'); // Onceki buffer'i temizle
+    printf("\nDevam etmek icin Enter'a basin");
+    while(getchar() != '\n');
     getchar(); // Bekle
 }
-
-// --- DENEY FONKSIYONLARI ---
-
-// 1. Serbest Dusme: h = 0.5 * g * t^2
+// 1.deney serbest dusme: h = 0.5 * g * t^2
 void exp_free_fall(double *g_ptr, char **names_ptr) {
     double t = get_positive_input("Sureyi giriniz (sn): ");
     
@@ -134,14 +115,13 @@ void exp_free_fall(double *g_ptr, char **names_ptr) {
     printf("--------------------------------\n");
     
     for (int i = 0; i < PLANET_COUNT; i++) {
-        // ZORUNLULUK: Pointer aritmetigi ile diziye erisim
         double g = *(g_ptr + i);
         double h = 0.5 * g * t * t;
         printf("%-10s | %0.2f m\n", *(names_ptr + i), h);
     }
 }
 
-// 2. Yukari Atis: h_max = v0^2 / (2g)
+// 2.deney yukari atis: h_max = ilkhız^2 / (2g)
 void exp_vertical_throw(double *g_ptr, char **names_ptr) {
     double v0 = get_positive_input("Firlatma hizini giriniz (m/s): ");
     
@@ -155,7 +135,7 @@ void exp_vertical_throw(double *g_ptr, char **names_ptr) {
     }
 }
 
-// 3. Agirlik: G = m * g
+// 3.deney agirlik: G = m* g
 void exp_weight(double *g_ptr, char **names_ptr) {
     double m = get_positive_input("Cismin kutlesini giriniz (kg): ");
     
@@ -164,15 +144,15 @@ void exp_weight(double *g_ptr, char **names_ptr) {
     
     for (int i = 0; i < PLANET_COUNT; i++) {
         double g = *(g_ptr + i);
-        double weight = m * g;
+        double weight = m* g;
         printf("%-10s | %0.2f N\n", *(names_ptr + i), weight);
     }
 }
 
-// 4. Potansiyel Enerji: Ep = m * g * h
+// 4.deney potansiyel enerji: Ep = m* g* h
 void exp_potential_energy(double *g_ptr, char **names_ptr) {
-    double m = get_positive_input("Cismin kutlesini giriniz (kg): ");
-    double h = get_positive_input("Yuksekligi giriniz (m): ");
+    double m = get_positive_input("cismin kutlesini giriniz (kg): ");
+    double h = get_positive_input("yuksekligi giriniz (m): ");
     
     printf("\n%-10s | %-20s\n", "Gezegen", "Potansiyel Enerji (J)");
     printf("--------------------------------\n");
@@ -184,10 +164,10 @@ void exp_potential_energy(double *g_ptr, char **names_ptr) {
     }
 }
 
-// 5. Hidrostatik Basinc: P = rho * g * h
+// 5.deney hidrostatik basinc: P = rho* g* h
 void exp_hydrostatic_pressure(double *g_ptr, char **names_ptr) {
-    double rho = get_positive_input("Sivinin yogunlugunu giriniz (kg/m^3): ");
-    double h = get_positive_input("Derinligi giriniz (m): ");
+    double rho = get_positive_input("sivinin yogunlugunu giriniz (kg/m^3): ");
+    double h = get_positive_input("derinligi giriniz (m): ");
     
     printf("\n%-10s | %-20s\n", "Gezegen", "Basinc (Pa)");
     printf("--------------------------------\n");
@@ -199,7 +179,7 @@ void exp_hydrostatic_pressure(double *g_ptr, char **names_ptr) {
     }
 }
 
-// 6. Arsimet Kaldirma Kuvveti: Fk = rho * g * V
+// 6.deney arsimet kaldirma kuvveti: Fk = rho* g* V
 void exp_buoyancy(double *g_ptr, char **names_ptr) {
     double rho = get_positive_input("Sivinin yogunlugunu giriniz (kg/m^3): ");
     double V = get_positive_input("Batan hacmi giriniz (m^3): ");
@@ -214,7 +194,7 @@ void exp_buoyancy(double *g_ptr, char **names_ptr) {
     }
 }
 
-// 7. Basit Sarkac Periyodu: T = 2 * PI * sqrt(L / g)
+// 7.deney basit sarkac periyodu: T = 2 * PI * sqrt(L / g)
 void exp_pendulum(double *g_ptr, char **names_ptr) {
     double L = get_positive_input("Sarkac uzunlugunu giriniz (m): ");
     
@@ -228,12 +208,12 @@ void exp_pendulum(double *g_ptr, char **names_ptr) {
     }
 }
 
-// 8. Sabit Ip Gerilmesi: T = m * g
+// 8.deney sabit ip gerilmesi: T = m * g
 void exp_rope_tension(double *g_ptr, char **names_ptr) {
     double m = get_positive_input("Asili cismin kutlesini giriniz (kg): ");
     
-    printf("\n%-10s | %-20s\n", "Gezegen", "Ip Gerilmesi (N)");
-    printf("--------------------------------\n");
+    printf("\n%-10s | %-20s\n", "Gezegen", "ip Gerilmesi (N)");
+    printf("--------------------------\n");
     
     for (int i = 0; i < PLANET_COUNT; i++) {
         double g = *(g_ptr + i);
@@ -242,14 +222,14 @@ void exp_rope_tension(double *g_ptr, char **names_ptr) {
     }
 }
 
-// 9. Asansor Deneyi: N = m(g + a) veya N = m(g - a)
+// 9.deney asansor: N = m(g + a) veya N = m(g - a)
 void exp_elevator(double *g_ptr, char **names_ptr) {
     double m = get_positive_input("Cismin kutlesini giriniz (kg): ");
     double a = get_positive_input("Asansorun ivmesini giriniz (m/s^2): ");
     
     printf("\nAsansorun Hareket Yonu:\n");
-    printf("1. Yukari Hizlanan veya Asagi Yavaslayan (+ ivme etkisi)\n");
-    printf("2. Asagi Hizlanan veya Yukari Yavaslayan (- ivme etkisi)\n");
+    printf("1. Yukari Hizlanan veya Asagi Yavaslayan (pozitif ivme etkisi)\n");
+    printf("2. Asagi Hizlanan veya Yukari Yavaslayan (negatif ivme etkisi)\n");
     
     int type;
     printf("Durumu seciniz (1 veya 2): ");
@@ -266,10 +246,7 @@ void exp_elevator(double *g_ptr, char **names_ptr) {
             N = m * (g + a); // Formu: 9
         } else {
             N = m * (g - a); // Formul: 9.1
-            // Agirlik negatif olamaz (yercekiminden hizli duserse tavana yapisir, 0 alinabilir veya mutlak)
-            // Fiziksel olarak ip kopmasi vs yoksa tavana dogru kuvvet uygular. 
-            // Ancak basitlik adina ternary ile mutlak alalim.
-            N = (N < 0) ? -N : N; 
+            N = (N < 0) ? -N : N; //agirlik negatif olamaz , mutlak yazabiliriz
         }
         
         printf("%-10s | %0.2f N\n", *(names_ptr + i), N);
